@@ -1,0 +1,44 @@
+﻿<EditForm Model="@staff" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <fieldset disabled="@Disabled">
+        <div class=" form-group">
+            <label>Staff Name: </label>
+            <div>
+                <InputText @bind-Value="@staff.StaffName" class="form-control" />
+                <ValidationMessage For="@(() => staff.StaffName)" />
+            </div>
+        </div>
+
+        <div class=" form-group">
+            <label>Staff Address: </label>
+            <div>
+                <InputText @bind-Value="@staff.StaffAddress" class="form-control" />
+                <ValidationMessage For="@(() => staff.StaffAddress)" />
+            </div>
+        </div>
+
+        <div class=" form-group">
+            <label>Staff Contact: </label>
+            <div>
+                <InputText @bind-Value="@staff.StaffContact" class="form-control" />
+                <ValidationMessage For="@(() => staff.StaffContact)" />
+            </div>
+        </div>
+    </fieldset>
+
+    @if (!Disabled)
+    {
+        <button type="submit" class="btn btn-success btn-block">
+            @ButtonText
+        </button>
+    }
+    <BackToList Target="staffs" />
+</EditForm>
+
+@code {
+    [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public Staff staff { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

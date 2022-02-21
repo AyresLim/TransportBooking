@@ -1,0 +1,36 @@
+﻿<EditForm Model="@vehicle" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <fieldset disabled="@Disabled">
+        <div class=" form-group">
+            <label>Vehicle Type: </label>
+            <div>
+                <InputText @bind-Value="@vehicle.VehicleType" class="form-control" />
+                <ValidationMessage For="@(() => vehicle.VehicleType)" />
+            </div>
+        </div>
+        <div class=" form-group">
+            <label>Vehicle License Plate: </label>
+            <div>
+                <InputText @bind-Value="@vehicle.VehicleLicensePlate" class="form-control" />
+                <ValidationMessage For="@(() => vehicle.VehicleLicensePlate)" />
+            </div>
+        </div>
+    </fieldset>
+
+    @if (!Disabled)
+    {
+        <button type="submit" class="btn btn-success btn-block">
+            @ButtonText
+        </button>
+    }
+    <BackToList Target="vehicles" />
+</EditForm>
+
+@code {
+
+    [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public Vehicle vehicle { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

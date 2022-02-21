@@ -1,0 +1,71 @@
+﻿@inject HttpClient _client
+
+<EditForm Model="@rating" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <fieldset disabled="@Disabled">
+        <div class=" form-group">
+            <label>Feedback: </label>
+            <div>
+                <InputNumber @bind-Value="@rating.Feedback" class="form-control" />
+                <ValidationMessage For="@(() => rating.Feedback)" />
+            </div>
+        </div>
+
+        <div class=" form-group">
+            <label>Review: </label>
+            <div>
+                <InputText @bind-Value="@rating.Review" class="form-control" />
+                <ValidationMessage For="@(() => rating.Review)" />
+            </div>
+        </div>
+
+        <div class=" form-group">
+            <label>Comment: </label>
+            <div>
+                <InputText @bind-Value="@rating.Comment" class="form-control" />
+                <ValidationMessage For="@(() => rating.Comment)" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Booking: </label>
+            <div>
+                <InputSelect @bind-Value="@rating.BookingID" class="form-control">
+                    <option value="">-- Select Booking --</option>
+                    @if (Bookings != null)
+                    {
+                        foreach (var booking in Bookings)
+                        {
+                <option value="@booking.Id">
+                    @booking.Passenger.PassengerName - @booking.Driver.DriverName - @booking.DateCreated.Date.ToString("dd MMMM yyyy")
+                </option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => rating.BookingID)" />
+            </div>
+        </div>
+    </fieldset>
+
+    @if (!Disabled)
+    {
+        <button type="submit" class="btn btn-success btn-block">
+            @ButtonText
+        </button>
+    }
+    <BackToList Target="ratings" />
+</EditForm>
+
+@code {
+    [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public Rating rating { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+    private IList<Booking> Bookings;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Bookings = await _client.GetFromJsonAsync<List<Booking>>($"{Endpoints.BookingsEndpoint}");
+    }
+}

@@ -1,0 +1,21 @@
+﻿@page "/drivers/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+
+<h3 class="card-title">Create New Driver</h3>
+<hr />
+<br />
+
+
+<FormComponent ButtonText="Create Driver" OnValidSubmit="@CreateDriver" driver="driver" />
+
+@code {
+    Driver driver = new Driver();
+
+    private async Task CreateDriver()
+    {
+        await _client.PostAsJsonAsync(Endpoints.DriversEndpoint, driver);
+        _navManager.NavigateTo("/drivers/");
+    }
+}

@@ -1,0 +1,18 @@
+﻿@page "/ratings/view/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>View Ratings</h3>
+
+<FormComponent rating="rating" Disabled="true" />
+
+@code {
+    [Parameter] public int id { get; set; }
+    Rating rating = new Rating();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        rating = await
+       _client.GetFromJsonAsync<Rating>($"{Endpoints.RatingsEndpoint}/{id}");
+    }
+}
